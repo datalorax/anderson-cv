@@ -36,14 +36,14 @@ PDF <- FALSE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
 if(PDF) {
   header <- '
   View online
-  <a href="https://www.datalorax.com" class="icon-block">
+  <a href="https://datalorax.github.io/anderson-cv/" class="icon-block">
       <i class="fas fafooter fa-globe"></i>
   </a>
   '
 } else {
   header <- '
   Download PDF
-  <a href="https://github.com/datalorax/ach-gap-variability/raw/master/manuscript/ach-gap-variability.pdf" class="icon-block">
+  <a href="https://github.com/datalorax/anderson-cv/raw/master/anderson-cv.pdf" class="icon-block">
       <i class="fas fafooter fa-download"></i>
   </a>
   '
