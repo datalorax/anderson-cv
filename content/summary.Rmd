@@ -1,0 +1,4 @@
+```{block type="col-1 grid-item", echo=TRUE}
+## About Me {.box}
+I am primarily interested in data science and computational social science, broadly defined as the intersection between computer science and statistics, as applied to large-scale research in education. I am particularly interested in systematic inequalities that influence students’ learning and growth over time. I am also a strong proponent of open and reproducible workflows. 
+```
