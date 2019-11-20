@@ -831,7 +831,7 @@ kable(pkg_aut_tbl)
 
 </div>
 
-<br class="pageBreak">
+<br class="flow-top">
 
 ## Contributor {.nohead .submitted}
 
