@@ -11,10 +11,10 @@ links-to-footnotes: false
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(lubridate)
 library(knitr)
+opts_chunk$set(echo = FALSE)
 options(knitr.kable.NA = '')
 
 #### cv entries #####
@@ -32,7 +32,7 @@ courses <- readxl::read_xlsx(here::here("data", "courses.xlsx"))
 
 
 ```{r}
-PDF <- FALSE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
+PDF <- TRUE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
 if(PDF) {
   header <- '
   View online
@@ -368,7 +368,7 @@ fa_doc <- ifelse(
 
 fa_git <- ifelse(
   !is.na(prpas$git_repo), 
-  paste0('[<i class="fas falink2 fa-github"></i>](', 
+  paste0('[<i class="fab falink2 fa-github"></i>](', 
          prpas$git_repo, 
          ")"
          ),
@@ -401,7 +401,7 @@ kable(pubs_tbl[seq(3, 13), ])
 
 </div>
 
-<br/>
+<br class = flow-top/>
 
 <div class = "hangingindent prpa nohead">
 
@@ -412,7 +412,7 @@ kable(pubs_tbl[seq(14, nrow(pubs_tbl)), ])
 </div>
 
 
-## Manuscripts under review for publication {.submitted .nohead}
+<!-- ## Manuscripts under review for publication {.submitted .nohead} -->
 
 <div class = "hangingindent">
 
@@ -420,7 +420,6 @@ kable(pubs_tbl[seq(14, nrow(pubs_tbl)), ])
 submitted <- pubs %>% 
   filter(type == "in-review") %>% 
   select(-type)
-
 
 fa_doc <- ifelse(
   !is.na(submitted$full_paper_link), 
@@ -446,10 +445,12 @@ empties <- map(each_cite, ~map_lgl(.x, is.na))
 cites <- map2(each_cite, empties, ~.x[ ,!.y])
 formatted_cites <- map(cites, ~do.call(make_cite, .x)) 
 
-submitted_tbl <- tibble(count = paste0(seq(length(formatted_cites), 1), "."),
-                        cites = paste(unlist(formatted_cites), fa_doc, fa_git)) 
+if(length(formatted_cites) > 0) {
+ submitted_tbl <- tibble(count = paste0(seq(length(formatted_cites), 1), "."),
+                         cites = paste(unlist(formatted_cites), fa_doc, fa_git)) 
   
-kable(submitted_tbl)
+  kable(submitted_tbl) 
+}
 ```
 
 </div>
@@ -682,11 +683,11 @@ make_grant_cite <- function(title, funding_agency, award_num, role, pi,
   link, in_review = FALSE, ...) {
   
   if(in_review) {
-    budg <- paste0(". Proposed budged: $", 
+    budg <- paste0(". Proposed budget: $", 
                    prettyNum(budget, big.mark = ",")
                    )
   } else {
-    budg <- paste0(". Total budged: $", 
+    budg <- paste0(". Total budget: $", 
                     prettyNum(budget, big.mark = ",")
                     )
   }
@@ -745,6 +746,8 @@ grants %>%
 ```
 
 </div>
+
+<br class="pageBreak">
 
 ## Current projects {.nohead .submitted}
 
@@ -826,12 +829,21 @@ fa_globe <- ifelse(
 pkg_aut_tbl <- tibble(count = paste0(seq(length(formatted_cites), 1), "."),
                       cites = paste(unlist(formatted_cites), fa_git, fa_globe)) 
   
-kable(pkg_aut_tbl)  
+kable(pkg_aut_tbl[1:5, ])  
 ```
 
 </div>
 
-<br class="flow-top">
+<br class = flow-top/>
+
+<div class = "hangingindent submitted nohead">
+
+```{r software2}
+kable(pkg_aut_tbl[6:nrow(pkg_aut_tbl), ])
+```
+
+</div>
+
 
 ## Contributor {.nohead .submitted}
 
@@ -988,7 +1000,7 @@ workshops %>%
 
 </div>
 
-<br class="pageBreak">
+<br class="flow-top">
 
 ## Ad hoc reviewer {.nohead}
 
