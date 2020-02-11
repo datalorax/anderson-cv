@@ -294,6 +294,8 @@ a:hover {
   display: grid;
   grid-template-columns: 44% 50%;
   grid-column-gap: 6%;
+  margin-bottom: -20px;
+  padding-bottom: -20px;
 }
 
 /* remove header in select table */
@@ -330,6 +332,8 @@ a:hover {
 }
 
 .education td:first-child {
+  margin-top: 0px;
+  padding-top: 0px;
   width: 18%;
 }
 
