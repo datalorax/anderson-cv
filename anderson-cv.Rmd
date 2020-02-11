@@ -540,7 +540,7 @@ conf_tbl <- conf_tbl %>%
   mutate(year = ifelse(count_within_year == 1, year, "")) %>% 
   select(-count_within_year)
 
-kable(conf_tbl[seq(1, 3), ])
+kable(conf_tbl[seq(1, 4), ])
 ```
 
 </div>
@@ -552,18 +552,17 @@ kable(conf_tbl[seq(1, 3), ])
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(conf_tbl[seq(4, 15), ])
+kable(conf_tbl[seq(5, 16), ])
 ```
 
 </div>
 
-
-<br class="flow-top">
+<br/>
 
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(conf_tbl[seq(16, 25), ])
+kable(conf_tbl[seq(17, 26), ])
 ```
 
 </div>
@@ -574,7 +573,7 @@ kable(conf_tbl[seq(16, 25), ])
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(conf_tbl[seq(26, nrow(conf_tbl)), ])
+kable(conf_tbl[seq(27, nrow(conf_tbl)), ])
 ```
 
 </div>
@@ -654,12 +653,12 @@ formatted_cites <- map(cites, ~do.call(make_cite, .x))
 submitted_tbl <- tibble(count = paste0(seq(length(formatted_cites), 1), "."),
                         cites = paste(unlist(formatted_cites), fa_doc, fa_git)) 
   
-kable(submitted_tbl[1:2, ])
+kable(submitted_tbl[1:4, ])
 ```
 
 </div>
 
-<br class="pageBreak">
+<br/>
 
 <div class = "hangingindent submitted nohead">
 
@@ -735,19 +734,19 @@ make_grant_cite <- function(title, funding_agency, award_num, role, pi,
 <div class = "hangingindent">
 
 ```{r}
-grants %>%
+grants_submitted <- grants %>%
   filter(type == "in-review") %>%
   group_by(count = paste0(seq(1, nrow(.)), ".")) %>%
   nest() %>%
   mutate(cite  = map(data, ~do.call(make_grant_cite, .x))) %>%
   select(-data) %>%
-  unnest(cite) %>%
-  kable()
+  unnest(cite) 
+
+kable(grants_submitted[1:2, ])
 ```
 
 </div>
 
-<br class="pageBreak">
 
 ## Current projects {.nohead .submitted}
 

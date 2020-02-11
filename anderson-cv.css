@@ -235,7 +235,9 @@ h2.box {
 .info-box {
   border-left: 2px solid darkgray;
   padding: 10px;
+  padding-left: 20px;
   margin: 10px;
+  margin-left: -10px;
 }
 .info-box thead {
   display: none;
@@ -292,8 +294,8 @@ a:hover {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 44% 50%;
-  grid-column-gap: 6%;
+  grid-template-columns: 52% 50%;
+  grid-column-gap: 3%;
   margin-bottom: -20px;
   padding-bottom: -20px;
 }
