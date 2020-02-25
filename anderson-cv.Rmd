@@ -149,6 +149,8 @@ cv_entries %>%
 ```
 
 ## Additional training (received) {.nohead .extratrain}
+
+<div class = "hangingindent">
 ```{r}
 cv_entries %>% 
   filter(type == "extra-training") %>% 
@@ -156,6 +158,7 @@ cv_entries %>%
   select(training) %>% 
   kable()
 ```
+<div/>
 
 # Teaching
 
@@ -247,9 +250,7 @@ Icons link to additional content
 </div>
 
 
-## Peer-Reviewed Publications {.prpa .nohead}
-
-<div class = "hangingindent">
+## Peer-Reviewed Publications
 
 ```{r}
 make_cite <- function(authors,	year,	title,	journal = NULL,	volume = NULL,	
@@ -385,28 +386,33 @@ pubs_tbl <- pubs_tbl %>%
   ungroup() %>% 
   mutate(year = ifelse(count_within_year == 1, year, "")) %>% 
   select(-count_within_year)
-  
-kable(pubs_tbl[1:2, ])
+```
+
+<div class = "hangingindent prpa nohead">
+
+```{r} 
+kable(pubs_tbl[1, ])
 ```
 
 </div>
 
-<br class = flow-top/>
+<br class="pageBreak"/>
 
-<div class = "hangingindent prpa nohead">
+<div class = "prpa nohead hangingindent">
 
 ```{r}
-kable(pubs_tbl[seq(3, 13), ])
+kable(pubs_tbl[seq(2, 12), ])
 ```
 
 </div>
 
-<br class = flow-top/>
+
+<br class="pageBreak"/>
 
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(pubs_tbl[seq(14, nrow(pubs_tbl)), ])
+kable(pubs_tbl[seq(13, nrow(pubs_tbl)), ])
 ```
 
 </div>
@@ -540,7 +546,7 @@ conf_tbl <- conf_tbl %>%
   mutate(year = ifelse(count_within_year == 1, year, "")) %>% 
   select(-count_within_year)
 
-kable(conf_tbl[seq(1, 4), ])
+kable(conf_tbl[seq(1, 3), ])
 ```
 
 </div>
@@ -552,7 +558,7 @@ kable(conf_tbl[seq(1, 4), ])
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(conf_tbl[seq(5, 16), ])
+kable(conf_tbl[seq(4, 15), ])
 ```
 
 </div>
@@ -562,7 +568,7 @@ kable(conf_tbl[seq(5, 16), ])
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(conf_tbl[seq(17, 26), ])
+kable(conf_tbl[seq(16, 25), ])
 ```
 
 </div>
@@ -573,7 +579,7 @@ kable(conf_tbl[seq(17, 26), ])
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(conf_tbl[seq(27, nrow(conf_tbl)), ])
+kable(conf_tbl[seq(26, nrow(conf_tbl)), ])
 ```
 
 </div>
@@ -653,7 +659,7 @@ formatted_cites <- map(cites, ~do.call(make_cite, .x))
 submitted_tbl <- tibble(count = paste0(seq(length(formatted_cites), 1), "."),
                         cites = paste(unlist(formatted_cites), fa_doc, fa_git)) 
   
-kable(submitted_tbl[1:4, ])
+kable(submitted_tbl[1:3, ])
 ```
 
 </div>
@@ -663,7 +669,7 @@ kable(submitted_tbl[1:4, ])
 <div class = "hangingindent submitted nohead">
 
 ```{r}
-kable(submitted_tbl[3:10, ])
+kable(submitted_tbl[4:10, ])
 ```
 
 </div>
@@ -747,6 +753,7 @@ kable(grants_submitted[1:2, ])
 
 </div>
 
+<br class = "pageBreak"/>
 
 ## Current projects {.nohead .submitted}
 
@@ -977,6 +984,10 @@ doc_stu %>%
 
 </div>
 
+## Conference organization
+I am the lead organizer of the 2020 [Cascadia R Conference](https://cascadiarconf.org), which includes keynotes on open science and from machine learning engineers using R in production with T-Mobile. The conference also includes workshops on data visualization, reproducible and dynamic report generation with R Markdown (lead by doctoral students from my courses), interactive web application development with [shiny](https://shiny.rstudio.com), and introductory machine learning. Conference presenters were from around the Pacific Northwest.
+
+
 ## Workshops delivered{.nohead .submitted}
 
 <div class = "hangingindent">
@@ -1001,9 +1012,9 @@ workshops %>%
 
 <br class="flow-top">
 
-## Ad hoc reviewer {.nohead}
+## Peer review service {.nohead}
 
-<span style= 'color: #5F6A6A;'>I have served as a peer reviewer for the following journals:</span>
+<span style= 'color: #5F6A6A;'>I serve on the [editorial review board](https://ila.onlinelibrary.wiley.com/hub/journal/19362722/editorial-board.html) for [Reading Research Quarterly](https://ila.onlinelibrary.wiley.com/journal/19362722) and have served as an ad hoc reviewer for the following journals:</span>
 
 <div class = "adhoc">
 

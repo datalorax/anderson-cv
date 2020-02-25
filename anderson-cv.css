@@ -178,8 +178,8 @@ p, li {
 }
 
 .extratrain td {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 .inote {
@@ -294,7 +294,7 @@ a:hover {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 52% 50%;
+  grid-template-columns: 49% 49%;
   grid-column-gap: 3%;
   margin-bottom: -20px;
   padding-bottom: -20px;
@@ -333,8 +333,11 @@ a:hover {
   text-align:left;
 }
 
+.education {
+  margin-top: 20px;
+}
 .education td:first-child {
-  margin-top: 0px;
+  margin-top: 10px;
   padding-top: 0px;
   width: 18%;
 }
