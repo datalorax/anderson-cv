@@ -792,7 +792,7 @@ rejected <- grants %>%
 
 <div class = "hangingindent">
 ```{r }
-kable(rejected[1:3, ])
+kable(rejected[1:2, ])
 ```
 </div>
 
@@ -800,7 +800,7 @@ kable(rejected[1:3, ])
 
 <div class = "hangingindent">
 ```{r }
-kable(rejected[4:nrow(rejected), ])
+kable(rejected[3:nrow(rejected), ])
 ```
 </div>
 
