@@ -1,6 +1,5 @@
 ---
 title: "Daniel Anderson's Vita"
-first: "dude"
 date: "Updated `r Sys.Date()`"
 output:
   pagedown::html_paged:
@@ -98,13 +97,8 @@ Research Assistant Professor
 Curriculum Vita
 </div>
 
-<!-- Add in some info about doctoral student advising/training - i.e., sondra committee -->
-
-
-
 
 <div class="grid-container">
-
 
 ```{r summary, child = here::here("content", "summary.Rmd")}
 ```
@@ -167,7 +161,7 @@ Icons link to additional content
 </div>
 
 ## Data science specialization {.nohead .tch}
-I have led the design, development, and teaching of a new [five-course graduate-level data science specialization](https://github.com/uo-datasci-specialization) offered through the University of Oregon's College of Education. The following lists the sequence of courses in the specialization, as well as the year/quarter the course was most recently taught.
+I have led the design, development, and teaching of a new [five-course graduate-level data science specialization](https://github.com/uo-datasci-specialization) offered through the University of Oregon's College of Education. The following lists the sequence of courses in the specialization, as well as the year/quarter in which I have taught the courses.
 
 ```{r}
 courses %>% 
@@ -184,7 +178,8 @@ courses %>%
                                 '><i class="fab falink fa-github"></i></a>'),
                          ""),
          course = paste0("*", title, "*. (", quarter, ", ",  year, "). ", 
-                         "CRN: ", crn, "; ", credits, " credit hours.",
+                         ifelse(!is.na(crn), paste0("CRN: ", crn, "; "), ""), 
+                         credits, " credit hours.",
                          fa_git, fa_web),
          order = paste0(order, ".")) %>% 
   select(order, course) %>% 
@@ -208,7 +203,8 @@ courses %>%
                                 '><i class="fab fafooter fa-github"></i></a>'),
                          ""),
          course = paste0("*", title, "*. (", quarter, ", ",  year, "). ", 
-                         "CRN: ", crn, "; ", credits, " credit hours.",
+                         ifelse(!is.na(crn), paste0("CRN: ", crn, "; "), ""),
+                         credits, " credit hours.",
                          fa_git, fa_web),
          order = paste0(order, ".")) %>% 
   select(order, course) %>% 
@@ -243,12 +239,13 @@ courses %>%
   kable()
 ```
 
+<br class="pageBreak"/>
+
 # Scholarship
 
 <div class = "inote">
 Icons link to additional content  
 </div>
-
 
 ## Peer-Reviewed Publications
 
@@ -391,34 +388,23 @@ pubs_tbl <- pubs_tbl %>%
 <div class = "hangingindent prpa nohead">
 
 ```{r} 
-kable(pubs_tbl[1, ])
+kable(pubs_tbl[1:9, ])
 ```
 
 </div>
-
-<br class="pageBreak"/>
-
-<div class = "prpa nohead hangingindent">
-
-```{r}
-kable(pubs_tbl[seq(2, 12), ])
-```
-
-</div>
-
 
 <br class="pageBreak"/>
 
 <div class = "hangingindent prpa nohead">
 
-```{r}
-kable(pubs_tbl[seq(13, nrow(pubs_tbl)), ])
+```{r} 
+kable(pubs_tbl[10:nrow(pubs_tbl), ])
 ```
 
 </div>
 
 
-<!-- ## Manuscripts under review for publication {.submitted .nohead} -->
+## Manuscripts under review for publication {.submitted .nohead}
 
 <div class = "hangingindent">
 
@@ -461,6 +447,8 @@ if(length(formatted_cites) > 0) {
 
 </div>
 
+
+<br class="pageBreak"/>
 
 ## Book chapters {.submitted .nohead}
 
@@ -546,29 +534,7 @@ conf_tbl <- conf_tbl %>%
   mutate(year = ifelse(count_within_year == 1, year, "")) %>% 
   select(-count_within_year)
 
-kable(conf_tbl[seq(1, 3), ])
-```
-
-</div>
-
-
-<br class="pageBreak">
-
-
-<div class = "hangingindent prpa nohead">
-
-```{r}
-kable(conf_tbl[seq(4, 15), ])
-```
-
-</div>
-
-<br/>
-
-<div class = "hangingindent prpa nohead">
-
-```{r}
-kable(conf_tbl[seq(16, 25), ])
+kable(conf_tbl[1:7, ])
 ```
 
 </div>
@@ -579,11 +545,31 @@ kable(conf_tbl[seq(16, 25), ])
 <div class = "hangingindent prpa nohead">
 
 ```{r}
-kable(conf_tbl[seq(26, nrow(conf_tbl)), ])
+kable(conf_tbl[8:18, ])
 ```
 
 </div>
 
+
+<br class="pageBreak">
+
+<div class = "hangingindent prpa nohead">
+
+```{r}
+kable(conf_tbl[19:28, ])
+```
+
+</div>
+
+<br class="pageBreak">
+
+<div class = "hangingindent prpa nohead">
+
+```{r}
+kable(conf_tbl[29:nrow(conf_tbl), ])
+```
+
+</div>
 
 ## Regional conferences {.nohead .submitted}
 
@@ -664,7 +650,6 @@ kable(submitted_tbl[1:3, ])
 
 </div>
 
-<br/>
 
 <div class = "hangingindent submitted nohead">
 
@@ -772,7 +757,6 @@ grants %>%
 
 </div>
 
-<!-- <br class="pageBreak"> -->
 
 ## Completed projects {.nohead .submitted}
 
@@ -791,6 +775,35 @@ grants %>%
 
 </div>
 
+## Submitted (unfunded) {.nohead .submitted}
+
+Note - only applications submitted as Principal Investigator are displayed.
+
+
+```{r}
+rejected <- grants %>%
+  filter(type == "rejected") %>%
+  group_by(count = paste0(seq(1, nrow(.)), ".")) %>%
+  nest() %>%
+  mutate(cite  = map(data, ~do.call(make_grant_cite, .x))) %>%
+  select(-data) %>%
+  unnest(cite)
+```
+
+<div class = "hangingindent">
+```{r }
+kable(rejected[1:3, ])
+```
+</div>
+
+<br class="pageBreak">
+
+<div class = "hangingindent">
+```{r }
+kable(rejected[4:nrow(rejected), ])
+```
+</div>
+
 # Software development
 
 <div class = "inote">
@@ -800,8 +813,6 @@ Icons link to additional content
 I am active in the R community and have developed a number of packages. My GitHub repositories for R rank in the [top 30 (of 8,590) nationally and top 100 (of 72,387) worldwide](http://git-awards.com/users/datalorax). Below is a summary of packages I have authored and contributed to, as well as a few interactive data applications.
 
 ## Author {.nohead .submitted}
-
-<div class = "hangingindent">
 
 ```{r }
 pkg_aut <- pubs %>% 
@@ -834,18 +845,14 @@ fa_globe <- ifelse(
 
 pkg_aut_tbl <- tibble(count = paste0(seq(length(formatted_cites), 1), "."),
                       cites = paste(unlist(formatted_cites), fa_git, fa_globe)) 
-  
-kable(pkg_aut_tbl[1:5, ])  
+
 ```
 
-</div>
-
-<br class = flow-top/>
 
 <div class = "hangingindent submitted nohead">
 
 ```{r software2}
-kable(pkg_aut_tbl[6:nrow(pkg_aut_tbl), ])
+kable(pkg_aut_tbl)
 ```
 
 </div>
@@ -892,7 +899,10 @@ kable(pkg_ctb_tbl)
 
 </div>
 
+<br class="pageBreak">
+
 ## Web applications {.nohead .submitted}
+In addition to the below, I have also developed interactive web applications and websites for non-profit and statewide agencies, which are generally password protected (and not directly shareable).
 
 <div class="hangingindent web-apps">
 
@@ -985,8 +995,9 @@ doc_stu %>%
 </div>
 
 ## Conference organization
-I am the lead organizer of the 2020 [Cascadia R Conference](https://cascadiarconf.org), which includes keynotes on open science and from machine learning engineers using R in production with T-Mobile. The conference also includes workshops on data visualization, reproducible and dynamic report generation with R Markdown (lead by doctoral students from my courses), interactive web application development with [shiny](https://shiny.rstudio.com), and introductory machine learning. Conference presenters were from around the Pacific Northwest.
+I was the lead organizer of the 2020 [Cascadia R Conference](https://cascadiarconf.org), which included planned keynotes on open science and  machine learning, with presenters from academia (University of Washington) and industry, with machine learning engineers who use R in production with T-Mobile. The conference also included planned workshops on data visualization, reproducible and dynamic report generation with R Markdown (lead by doctoral students from my courses), interactive web application development with [shiny](https://shiny.rstudio.com), and introductory machine learning. Conference presenters were from around the Pacific Northwest, and an emphasis on gender and ethnic representation was emphasized when considering prospective presenters. The conference was canceled due to COVID-19.
 
+<br class="pageBreak">
 
 ## Workshops delivered{.nohead .submitted}
 
@@ -1010,11 +1021,10 @@ workshops %>%
 
 </div>
 
-<br class="flow-top">
 
 ## Peer review service {.nohead}
 
-<span style= 'color: #5F6A6A;'>I serve on the [editorial review board](https://ila.onlinelibrary.wiley.com/hub/journal/19362722/editorial-board.html) for [Reading Research Quarterly](https://ila.onlinelibrary.wiley.com/journal/19362722) and have served as an ad hoc reviewer for the following journals:</span>
+I serve on the editorial review board for [Reading Research Quarterly](https://ila.onlinelibrary.wiley.com/journal/19362722) and have served as an ad hoc reviewer for the following journals:
 
 <div class = "adhoc">
 
@@ -1042,6 +1052,8 @@ data.frame(jou1, jou2) %>%
 ```
 
 </div>
+
+In addition to these journals, I have served as a reviewer for the annual conferences for the [American Educational Research Association](https://www.aera.net) and the [Council for Exceptional Children](https://exceptionalchildren.org).
 
 <!-- <br class="pageBreak"> -->
 
