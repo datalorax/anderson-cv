@@ -683,7 +683,7 @@ make_grant_cite <- function(title, funding_agency, award_num, role, pi,
   }
   funder <- paste0("*", funding_agency, "* ")
   if(!is.na(award_num)) {
-    funder <- paste0(funder, " (Award #", award_num, "). ")
+    funder <- paste0(funder, " (Award #", award_num, ")")
   }
   if(fte_low_range != fte_high_range) {
     fte <- paste0("FTE: ", 
@@ -702,6 +702,7 @@ make_grant_cite <- function(title, funding_agency, award_num, role, pi,
                        "to",
                        month(date_end, label = TRUE, abbr = FALSE), 
                        year(date_end)),
+                 ". ", funder, 
                  budg,
                  paste0(". ", 
                         "<span style= 'font-weight: 500'> Role: </span>", 
@@ -775,9 +776,11 @@ grants %>%
 
 </div>
 
+<br class = "pageBreak"/>
+
 ## Submitted (unfunded) {.nohead .submitted}
 
-Note - only applications submitted as Principal Investigator are displayed.
+Only applications submitted as Principal Investigator to national agencies are displayed.
 
 
 ```{r}
@@ -792,15 +795,7 @@ rejected <- grants %>%
 
 <div class = "hangingindent">
 ```{r }
-kable(rejected[1:2, ])
-```
-</div>
-
-<br class="pageBreak">
-
-<div class = "hangingindent">
-```{r }
-kable(rejected[3:nrow(rejected), ])
+kable(rejected)
 ```
 </div>
 
