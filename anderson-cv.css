@@ -196,7 +196,7 @@ p, li {
   padding-bottom: 3px;
 }
 
-.hangingindent {
+.hangingindent td {
   padding-left: 24px ;
   text-indent: -24px ;
 }
@@ -385,7 +385,7 @@ td {
 }
 
 .web-apps td:nth-child(2) {
-  padding-left: 5px;
+  padding-left: 20px;
 }
 
 .adhoc table {
@@ -399,17 +399,6 @@ td {
 
 .adhoc tr:nth-child(even) {
   background-color: #F6F6F6;
-}
-
-.adhoc td {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-.adhoc td:nth-child(1) {
-  padding-left: 5px;
-}
-.adhoc td:nth-child(2) {
-  padding-left: 50px;
 }
 
 .prof td:nth-child(2) {
