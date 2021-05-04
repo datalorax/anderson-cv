@@ -40,11 +40,7 @@ if(PDF) {
   </a>
   '
 } else {
-  header <- '
-  Download PDF
-  <a href="https://github.com/datalorax/anderson-cv/raw/master/anderson-cv.pdf" class="icon-block">
-      <i class="fas fafooter fa-download"></i>
-  </a>
+  header <- 'Download PDF  <a><i class="fas fafooter fa-download" href="https://github.com/datalorax/anderson-cv/raw/master/anderson-cv.pdf"></i></a>
   '
 }
 ```
