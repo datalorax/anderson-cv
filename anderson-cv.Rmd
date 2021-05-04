@@ -34,13 +34,17 @@ courses <- readxl::read_xlsx(here::here("data", "courses.xlsx"))
 PDF <- FALSE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
 if(PDF) {
   header <- '
-  View online
-  <a href="https://datalorax.github.io/anderson-cv/" class="icon-block">
-      <i class="fas fafooter fa-globe"></i>
+  <a style = "color:#808080" href="https://datalorax.github.io/anderson-cv/" class="icon-block">
+      View online
   </a>
+  <i style = "color:#808080" class="fas fafooter fa-globe"></i>
   '
 } else {
-  header <- 'Download PDF  <a><i class="fas fafooter fa-download" href="https://github.com/datalorax/anderson-cv/raw/master/anderson-cv.pdf"></i></a>
+  header <- '
+  <a style = "color:#808080" href="https://github.com/datalorax/anderson-cv/raw/master/anderson-cv.pdf">
+    Download PDF
+  </a>
+  <i style = "color:#808080" class="fas fa-download"></i>
   '
 }
 ```
