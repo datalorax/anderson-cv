@@ -404,3 +404,7 @@ td {
 .prof td:nth-child(2) {
   padding-left: 15px;
 }
+
+sp {
+  color: #FFF;
+}

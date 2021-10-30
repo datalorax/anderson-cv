@@ -167,22 +167,26 @@ I have led the design, development, and teaching of a new [five-course graduate-
 courses %>% 
   filter(type == "ds") %>% 
   arrange(order) %>% 
-  mutate(fa_web = ifelse(!is.na(website), 
-                         paste0( '<a href=', 
-                                 website, 
-                                 '><i class="fas falink fa-globe"></i></a>'),
+  mutate(fa_web = ifelse(!is.na(website),
+                         paste0(
+                           '[<i class="fas falink fa-globe"></i>](',
+                           website,
+                           ')'
+                         ),
                          ""),
-         fa_git = ifelse(!is.na(repo), 
-                         paste0('<a href=', 
-                                repo, 
-                                '><i class="fab falink fa-github"></i></a>'),
+         fa_git = ifelse(!is.na(repo),
+                         paste0(
+                           '[<i class="fab falink fa-github"></i>](',
+                           repo,
+                           ')'
+                         ),
                          ""),
          course = paste0("*", title, "*. (", quarter, ", ",  year, "). ", 
                          ifelse(!is.na(crn), paste0("CRN: ", crn, "; "), ""), 
-                         credits, " credit hours.",
-                         fa_git, fa_web),
-         order = paste0(order, ".")) %>% 
-  select(order, course) %>% 
+                         credits, " credit hours.<sp>Sl</sp>",
+                         fa_git, "<sp>Sl</sp>", fa_web),
+         order = paste0(order, ".")) %>%
+  select(order, course) %>%
   kable()
 ```
 
@@ -205,7 +209,7 @@ courses %>%
          course = paste0("*", title, "*. (", quarter, ", ",  year, "). ", 
                          ifelse(!is.na(crn), paste0("CRN: ", crn, "; "), ""),
                          credits, " credit hours.",
-                         fa_git, fa_web),
+                         "<sp>Sl</sp>", fa_git, "<sp>Sl</sp>", fa_web),
          order = paste0(order, ".")) %>% 
   select(order, course) %>% 
   kable()
@@ -232,7 +236,8 @@ courses %>%
                           paste0(credits, " credit hours."),
                           ""),
          course = paste0("*", title, "*. (", quarter, ", ",  year, "). ", 
-                         crn, credits,fa_git, fa_web),
+                         crn, credits, 
+                         "<sp>Sl</sp>", fa_git, "<sp>Sl</sp>", fa_web),
          course = gsub("NA, ", "", course),
          order = paste0(order, ".")) %>% 
   select(order, course) %>% 
@@ -672,25 +677,24 @@ make_grant_cite <- function(title, funding_agency, award_num, role, pi,
 }
 ```
 
-<!-- ## Under review {.nohead .submitted} -->
+## Under review {.nohead .submitted}
 
-<!-- <div class = "hangingindent"> -->
+<div class = "hangingindent">
 
-<!-- ```{r} -->
-<!-- grants_submitted <- grants %>% -->
-<!--   filter(type == "in-review") %>% -->
-<!--   group_by(count = paste0(seq(1, nrow(.)), ".")) %>% -->
-<!--   nest() %>% -->
-<!--   mutate(cite  = map(data, ~do.call(make_grant_cite, .x))) %>% -->
-<!--   select(-data) %>% -->
-<!--   unnest(cite)  -->
+```{r}
+grants_submitted <- grants %>%
+  filter(type == "in-review") %>%
+  group_by(count = paste0(seq(1, nrow(.)), ".")) %>%
+  nest() %>%
+  mutate(cite  = map(data, ~do.call(make_grant_cite, .x))) %>%
+  select(-data) %>%
+  unnest(cite)
 
-<!-- kable(grants_submitted[1:2, ]) -->
-<!-- ``` -->
+kable(grants_submitted[1:2, ])
+```
 
-<!-- </div> -->
+</div>
 
-<!-- <br class = "pageBreak"/> -->
 
 ## Current projects {.nohead .submitted}
 
@@ -709,6 +713,7 @@ grants %>%
 
 </div>
 
+<br class = "pageBreak"/>
 
 ## Completed projects {.nohead .submitted}
 
@@ -823,7 +828,6 @@ kable(pkg_ctb_tbl)
 
 </div>
 
-<br class="pageBreak">
 
 ## Web applications {.nohead .submitted}
 In addition to the below, I have also developed interactive web applications and websites for non-profit and statewide agencies, which are generally password protected (and not directly shareable).
@@ -874,7 +878,7 @@ kable(web_app_tbl)
 ## Working Committees {.nohead .submitted}
 
 <div class = "hangingindent">
-
+ 
 ```{r}
 committees <- cv_entries %>%
   filter(type == "service")
@@ -918,10 +922,10 @@ doc_stu %>%
 
 </div>
 
+<br class = "pageBreak"/>
+
 ## Conference organization
 I was the lead organizer of the 2020 [Cascadia R Conference](https://cascadiarconf.org), which included planned keynotes on open science and  machine learning, with presenters from academia (University of Washington) and industry, with machine learning engineers who use R in production with T-Mobile. The conference also included planned workshops on data visualization, reproducible and dynamic report generation with R Markdown (lead by doctoral students from my courses), interactive web application development with [shiny](https://shiny.rstudio.com), and introductory machine learning. Conference presenters were from around the Pacific Northwest, and an emphasis on gender and ethnic representation was emphasized when considering prospective presenters. The conference was canceled due to COVID-19.
-
-<br class="pageBreak">
 
 ## Workshops delivered{.nohead .submitted}
 
