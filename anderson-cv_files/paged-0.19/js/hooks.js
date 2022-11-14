@@ -63,9 +63,22 @@
       super(chunker, polisher, caller);
     }
     beforeParsed(content) {
-      const abbreviations = content.querySelectorAll('abbr');
-      if(abbreviations.length === 0) return;
-      const loaTitle = 'List of Abbreviations';
+      // Find the abbreviation nodes
+      const abbrNodeList = content.querySelectorAll('abbr');
+
+      // Return early if there is no abbreviation
+      if (abbrNodeList.length === 0) return;
+
+      // Store unique values of abbreviations, see https://github.com/rstudio/pagedown/issues/218
+      let abbreviations = [];
+      for (const {title, innerHTML} of abbrNodeList.values()) {
+        if (abbreviations.find(el => el.title === title && el.innerHTML === innerHTML)) {
+          continue;
+        }
+        abbreviations.push({title: title, innerHTML: innerHTML});
+      }
+
+      const loaTitle = pandocMeta['loa-title'] ? pandocMetaToString(pandocMeta['loa-title']) : 'List of Abbreviations';
       const loaId = 'LOA';
       const tocList = content.querySelector('.toc ul');
       let listOfAbbreviations = document.createElement('div');
@@ -507,4 +520,189 @@
       }
     }
   });
+
+  // Clean links to avoid impossible line breaking of long urls in a justified text
+  // Author: Julien Taquet (Paged.js core team)
+  // see https://github.com/spyrales/gouvdown/issues/37
+  Paged.registerHandlers(class extends Paged.Handler {
+    constructor(chunker, polisher, caller) {
+      super(chunker, polisher, caller);
+    }
+    beforeParsed(content) {
+      // add wbr to / in links
+      const links = content.querySelectorAll('a[href^="http"], a[href^="www"]');
+      links.forEach(link => {
+        // Rerun to avoid large spaces.
+        // Break after a colon or a double slash (//)
+        // or before a single slash (/), a tilde (~), a period, a comma, a hyphen,
+        // an underline (_), a question mark, a number sign, or a percent symbol.
+        const content = link.textContent;
+        if (!(link.childElementCount === 0 && content.match(/^http|^www/))) return;
+        let printableUrl = content.replace(/\/\//g, "//\u003Cwbr\u003E");
+        printableUrl = printableUrl.replace(/\,/g, ",\u003Cwbr\u003E");
+        // put wbr around everything.
+        printableUrl = printableUrl.replace(
+          /(\/|\~|\-|\.|\,|\_|\?|\#|\%)/g,
+          "\u003Cwbr\u003E$1"
+        );
+        // turn hyphen in non breaking hyphen
+        printableUrl = printableUrl.replace(/\-/g, "\u003Cwbr\u003E&#x2011;");
+        link.setAttribute("data-print-url", printableUrl);
+        link.innerHTML = printableUrl;
+      });
+    }
+  });
+
+  // Repeat table headers on multiple pages
+  // Authors: Julien Taquet, Lucas Maciuga and Tafael Caixeta, see https://gitlab.coko.foundation/pagedjs/pagedjs/-/issues/84
+  // TODO: remove this hook when Paged.js integrates this feature
+  Paged.registerHandlers(class RepeatingTableHeadersHandler extends Paged.Handler {
+
+    constructor(chunker, polisher, caller) {
+        super(chunker, polisher, caller);
+        this.splitTablesRefs = [];
+    }
+
+    afterPageLayout(pageElement, page, breakToken, chunker) {
+        this.chunker = chunker;
+        this.splitTablesRefs = [];
+
+        if (breakToken) {
+            const node = breakToken.node;
+            const tables = this.findAllAncestors(node, "table");
+            if (node.tagName === "TABLE") {
+                tables.push(node);
+            }
+
+            if (tables.length > 0) {
+                this.splitTablesRefs = tables.map(t => t.dataset.ref);
+
+                //checks if split inside thead and if so, set breakToken to next sibling element
+                let thead = node.tagName === "THEAD" ? node : this.findFirstAncestor(node, "thead");
+                if (thead) {
+                    let lastTheadNode = thead.hasChildNodes() ? thead.lastChild : thead;
+                    breakToken.node = this.nodeAfter(lastTheadNode, chunker.source);
+                }
+
+                this.hideEmptyTables(pageElement, node);
+            }
+        }
+    }
+
+    hideEmptyTables(pageElement, breakTokenNode) {
+        this.splitTablesRefs.forEach(ref => {
+            let table = pageElement.querySelector("[data-ref='" + ref + "']");
+            if (table) {
+                let sourceBody = table.querySelector("tbody > tr");
+                if (!sourceBody || this.refEquals(sourceBody.firstElementChild, breakTokenNode)) {
+                    table.style.visibility = "hidden";
+                    table.style.position = "absolute";
+                    let lineSpacer = table.nextSibling;
+                    if (lineSpacer) {
+                        lineSpacer.style.visibility = "hidden";
+                        lineSpacer.style.position = "absolute";
+                    }
+                }
+            }
+        });
+    }
+
+    refEquals(a, b) {
+        return a && a.dataset && b && b.dataset && a.dataset.ref === b.dataset.ref;
+    }
+
+    findFirstAncestor(element, selector) {
+        while (element.parentNode && element.parentNode.nodeType === 1) {
+            if (element.parentNode.matches(selector)) {
+                return element.parentNode;
+            }
+            element = element.parentNode;
+        }
+        return null;
+    }
+
+    findAllAncestors(element, selector) {
+        const ancestors = [];
+        while (element.parentNode && element.parentNode.nodeType === 1) {
+            if (element.parentNode.matches(selector)) {
+                ancestors.unshift(element.parentNode);
+            }
+            element = element.parentNode;
+        }
+        return ancestors;
+    }
+
+    // The addition of repeating Table Headers is done here because this hook is triggered before overflow handling
+    layout(rendered, layout) {
+        this.splitTablesRefs.forEach(ref => {
+            const renderedTable = rendered.querySelector("[data-ref='" + ref + "']");
+            if (renderedTable && renderedTable.hasAttribute("data-split-from")) {
+                // this event can be triggered multiple times
+                // added a flag repeated-headers to control when table headers already repeated in current page.
+                if (!renderedTable.getAttribute("repeated-headers")) {
+                    const sourceTable = this.chunker.source.querySelector("[data-ref='" + ref + "']");
+                    this.repeatColgroup(sourceTable, renderedTable);
+                    this.repeatTHead(sourceTable, renderedTable);
+                    renderedTable.setAttribute("repeated-headers", true);
+                }
+            }
+        });
+    }
+
+    repeatColgroup(sourceTable, renderedTable) {
+        let colgroup = sourceTable.querySelectorAll("colgroup");
+        let firstChild = renderedTable.firstChild;
+        colgroup.forEach((colgroup) => {
+            let clonedColgroup = colgroup.cloneNode(true);
+            renderedTable.insertBefore(clonedColgroup, firstChild);
+        });
+    }
+
+    repeatTHead(sourceTable, renderedTable) {
+        let thead = sourceTable.querySelector("thead");
+        if (thead) {
+            let clonedThead = thead.cloneNode(true);
+            renderedTable.insertBefore(clonedThead, renderedTable.firstChild);
+        }
+    }
+
+    // the functions below are from pagedjs utils/dom.js
+    nodeAfter(node, limiter) {
+        if (limiter && node === limiter) {
+            return;
+        }
+        let significantNode = this.nextSignificantNode(node);
+        if (significantNode) {
+            return significantNode;
+        }
+        if (node.parentNode) {
+            while ((node = node.parentNode)) {
+                if (limiter && node === limiter) {
+                    return;
+                }
+                significantNode = this.nextSignificantNode(node);
+                if (significantNode) {
+                    return significantNode;
+                }
+            }
+        }
+    }
+
+    nextSignificantNode(sib) {
+        while ((sib = sib.nextSibling)) {
+            if (!this.isIgnorable(sib)) return sib;
+        }
+        return null;
+    }
+
+    isIgnorable(node) {
+        return (node.nodeType === 8) || // A comment node
+            ((node.nodeType === 3) && this.isAllWhitespace(node)); // a text node, all whitespace
+    }
+
+    isAllWhitespace(node) {
+        return !(/[^\t\n\r ]/.test(node.textContent));
+    }
+  });
+
 }
