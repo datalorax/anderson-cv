@@ -31,7 +31,7 @@ courses <- readxl::read_xlsx(here::here("data", "courses.xlsx"))
 
 
 ```{r}
-PDF <- TRUE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
+PDF <- FALSE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
 if(PDF) {
   header <- '
   <a style = "color:#808080" href="https://datalorax.github.io/anderson-cv/" class="icon-block">
@@ -89,7 +89,7 @@ cat(header)
 </div>
 
 <div id = "position", class = "position">
-Research Assistant Professor
+Senior Data Scientist
 </div>
 
 
@@ -467,7 +467,6 @@ kable(chapters_tbl)
 
 </div>
 
-<br class="pageBreak">
 
 ## National & International Conference Presentations {.prpa .nohead}
 
@@ -983,7 +982,7 @@ data.frame(jou1, jou2) %>%
 
 In addition to these journals, I have served as a reviewer for the annual conferences for the [American Educational Research Association](https://www.aera.net) and the [Council for Exceptional Children](https://exceptionalchildren.org).
 
-<!-- <br class="pageBreak"> -->
+<!-- -->
 
 # Awards {.submitted .nohead}
 
