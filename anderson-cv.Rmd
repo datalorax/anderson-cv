@@ -31,7 +31,7 @@ courses <- readxl::read_xlsx(here::here("data", "courses.xlsx"))
 
 
 ```{r}
-PDF <- FALSE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
+PDF <- TRUE # Set to TRUE when rendering to PDF via pagedown::chrome_print()
 if(PDF) {
   header <- '
   <a style = "color:#808080" href="https://datalorax.github.io/anderson-cv/" class="icon-block">
